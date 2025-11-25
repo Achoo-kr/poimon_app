@@ -1,0 +1,7 @@
+flutter_icons:
+  ios: false
+  android: true
+  image_path_ios: "assets/images/icons/new_appicon.png"
+  image_path_ios_dark_transparent: "assets/images/icons/new_appicon_dark.png"
+  image_path_android: "assets/images/icons/new_appicon_android.png"
+  remove_alpha_ios: true

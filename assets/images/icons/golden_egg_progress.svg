@@ -1,0 +1,33 @@
+<svg width="38" height="43" viewBox="0 0 38 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 2085664419">
+<path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M29.6108 19.1641C29.6108 20.5656 28.4747 21.7017 27.0732 21.7017C25.6717 21.7017 24.5356 20.5656 24.5356 19.1641C24.5356 17.7626 25.6717 16.6265 27.0732 16.6265C28.4747 16.6265 29.6108 17.7626 29.6108 19.1641ZM19.5415 18.1361H22.4016L21.981 22.8468C20.8313 21.8093 18.4984 19.5829 18.3638 18.9773C18.2292 18.3716 19.0929 18.1641 19.5415 18.1361Z" fill="white"/>
+<g id="Group 2085664286">
+<g id="Vector 540" filter="url(#filter0_i_500_3611)">
+<path d="M35.6749 15.8184C31.0877 5.95931 24.0072 4.29331 21.0403 4.69269C8.8878 6.7465 4.951 23.0071 6.40584 29.4258C8.25757 43.0334 21.8962 44.2315 28.486 41.8352C35.0758 39.4389 41.4089 28.1422 35.6749 15.8184Z" fill="#FBE200"/>
+</g>
+<ellipse id="Ellipse 652" cx="29.0769" cy="12.4106" rx="3.76562" ry="9.38074" transform="rotate(-40.1058 29.0769 12.4106)" fill="#FFCF0B"/>
+<ellipse id="Ellipse 653" cx="20.132" cy="29.2157" rx="6.83944" ry="8.52946" transform="rotate(51.5812 20.132 29.2157)" fill="#FFCF0B"/>
+<ellipse id="Ellipse 654" cx="7.51572" cy="26.1733" rx="1.02248" ry="1.87244" transform="rotate(1.00781 7.51572 26.1733)" fill="#FFCF0B"/>
+<g id="Ellipse 655" filter="url(#filter1_f_500_3611)">
+<ellipse cx="15.5804" cy="17.6367" rx="4.45028" ry="6.94366" transform="rotate(18.0357 15.5804 17.6367)" fill="white" fill-opacity="0.6"/>
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter0_i_500_3611" x="-2.36545" y="-0.0265274" width="40.2788" height="42.8476" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="-8.48346" dy="-4.6659"/>
+<feGaussianBlur stdDeviation="7.21094"/>
+<feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.956827 0 0 0 0 0.471537 0 0 0 0 0.0235766 0 0 0 0.32 0"/>
+<feBlend mode="normal" in2="shape" result="effect1_innerShadow_500_3611"/>
+</filter>
+<filter id="filter1_f_500_3611" x="0.652859" y="0.710445" width="29.8551" height="33.8524" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="5.09007" result="effect1_foregroundBlur_500_3611"/>
+</filter>
+</defs>
+</svg>

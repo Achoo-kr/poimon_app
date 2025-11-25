@@ -1,0 +1,41 @@
+targets:
+  $default:
+    builders:
+      freezed:
+        generate_for:
+          include:
+            - "lib/src/domain/entities/requests/**.dart"
+            - "lib/src/domain/entities/responses/**.dart"
+            - "lib/src/infrastructure/models/**.dart"
+            - "lib/src/presentation/blocs/**/**_cubit.dart"
+            - "lib/src/presentation/pages/**/cubits/**_cubit.dart"
+            - "lib/src/presentation/widgets/**/cubits/**_cubit.dart"
+        options:
+          map: false
+          when: false
+      functional_widget:
+        generate_for:
+          include:
+            - "lib/src/presentation/pages/**/views/**_view.dart"
+            - "lib/src/presentation/widgets/**_view.dart"
+      go_router_builder:
+        generate_for:
+          include:
+            - "lib/src/presentation/pages/**/**_page.dart"
+            - "lib/src/presentation/pages/**/**_branch.dart"
+      injectable_generator:injectable_builder:
+        generate_for:
+          include:
+            - "lib/src/application/config/**.dart"
+            - "lib/src/application/routes/**.dart"
+            - "lib/src/di/**.dart"
+            - "lib/src/domain/use_cases/**/**_use_case.dart"
+            - "lib/src/infrastructure/data_sources/**.dart"
+            - "lib/src/infrastructure/repositories/**_impl.dart"
+            - "lib/src/presentation/blocs/**.dart"
+            - "lib/src/presentation/pages/**/cubits/**_cubit.dart"
+            - "lib/src/presentation/widgets/**/cubits/**_cubit.dart"
+      retrofit_generator:
+        generate_for:
+          include:
+            - "lib/src/infrastructure/data_sources/remote/api/**_api.dart"
