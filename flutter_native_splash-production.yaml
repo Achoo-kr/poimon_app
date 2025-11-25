@@ -1,18 +1,15 @@
 flutter_native_splash:
-  ios: true
-  android: false
-  image: assets/images/splash/splash_production.png
-  color: '#FFFFFF'
+  ios: false
+  android: true
+  color: '#f6f6f7'
+  image: assets/images/splash/new_splash.png
+  branding: assets/images/splash/new_branding_image.png
+
+  android_12:
+    color: '#f6f6f7'
+    image: assets/images/splash/new_splash.png
+    branding: assets/images/splash/new_branding_image.png
 
 
 
-  # ios: false
-  # android: true
-  # color: '#f6f6f7'
-  # image: assets/images/splash/new_splash.png
-  # branding: assets/images/splash/new_branding_image.png
 
-  # android_12:
-  #   color: '#f6f6f7'
-  #   image: assets/images/splash/new_splash.png
-  #   branding: assets/images/splash/new_branding_image.png
