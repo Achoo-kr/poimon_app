@@ -54,10 +54,10 @@ dependencies:
   share_plus: ^10.0.1
   shared_preferences: ^2.2.2
   showcaseview: ^2.0.3
-  talker: ^4.1.0
-  talker_bloc_logger: ^4.1.0
-  talker_dio_logger: ^4.1.0
-  talker_flutter: ^4.1.0
+  talker: ^5.1.0
+  talker_bloc_logger: ^5.1.0
+  talker_dio_logger: ^5.1.0
+  talker_flutter: ^5.0.0-dev.7
   url_launcher: ^6.2.5
   uuid: ^4.4.0
   flutter_sticky_header: ^0.7.0
