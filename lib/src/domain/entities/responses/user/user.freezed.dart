@@ -51,6 +51,10 @@ abstract class $UserCopyWith<$Res> {
       UserReferral referral,
       UserSetting setting,
       bool isPhoneVerified});
+
+  $WalletCopyWith<$Res> get wallet;
+  $UserReferralCopyWith<$Res> get referral;
+  $UserSettingCopyWith<$Res> get setting;
 }
 
 /// @nodoc
@@ -68,15 +72,15 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
   $Res call({
     Object? userId = null,
     Object? createdAt = null,
-    Object? authProvider = freezed,
+    Object? authProvider = null,
     Object? accumulatedPoint = null,
     Object? nickname = null,
     Object? email = null,
     Object? phoneNumber = freezed,
-    Object? status = freezed,
-    Object? wallet = freezed,
-    Object? referral = freezed,
-    Object? setting = freezed,
+    Object? status = null,
+    Object? wallet = null,
+    Object? referral = null,
+    Object? setting = null,
     Object? isPhoneVerified = null,
   }) {
     return _then(_value.copyWith(
@@ -88,7 +92,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      authProvider: freezed == authProvider
+      authProvider: null == authProvider
           ? _value.authProvider
           : authProvider // ignore: cast_nullable_to_non_nullable
               as AuthProvider,
@@ -108,19 +112,19 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LogInStatusEnum,
-      wallet: freezed == wallet
+      wallet: null == wallet
           ? _value.wallet
           : wallet // ignore: cast_nullable_to_non_nullable
               as Wallet,
-      referral: freezed == referral
+      referral: null == referral
           ? _value.referral
           : referral // ignore: cast_nullable_to_non_nullable
               as UserReferral,
-      setting: freezed == setting
+      setting: null == setting
           ? _value.setting
           : setting // ignore: cast_nullable_to_non_nullable
               as UserSetting,
@@ -129,6 +133,30 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           : isPhoneVerified // ignore: cast_nullable_to_non_nullable
               as bool,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $WalletCopyWith<$Res> get wallet {
+    return $WalletCopyWith<$Res>(_value.wallet, (value) {
+      return _then(_value.copyWith(wallet: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserReferralCopyWith<$Res> get referral {
+    return $UserReferralCopyWith<$Res>(_value.referral, (value) {
+      return _then(_value.copyWith(referral: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UserSettingCopyWith<$Res> get setting {
+    return $UserSettingCopyWith<$Res>(_value.setting, (value) {
+      return _then(_value.copyWith(setting: value) as $Val);
+    });
   }
 }
 
@@ -152,6 +180,13 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       UserReferral referral,
       UserSetting setting,
       bool isPhoneVerified});
+
+  @override
+  $WalletCopyWith<$Res> get wallet;
+  @override
+  $UserReferralCopyWith<$Res> get referral;
+  @override
+  $UserSettingCopyWith<$Res> get setting;
 }
 
 /// @nodoc
@@ -166,15 +201,15 @@ class __$$UserImplCopyWithImpl<$Res>
   $Res call({
     Object? userId = null,
     Object? createdAt = null,
-    Object? authProvider = freezed,
+    Object? authProvider = null,
     Object? accumulatedPoint = null,
     Object? nickname = null,
     Object? email = null,
     Object? phoneNumber = freezed,
-    Object? status = freezed,
-    Object? wallet = freezed,
-    Object? referral = freezed,
-    Object? setting = freezed,
+    Object? status = null,
+    Object? wallet = null,
+    Object? referral = null,
+    Object? setting = null,
     Object? isPhoneVerified = null,
   }) {
     return _then(_$UserImpl(
@@ -186,7 +221,7 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      authProvider: freezed == authProvider
+      authProvider: null == authProvider
           ? _value.authProvider
           : authProvider // ignore: cast_nullable_to_non_nullable
               as AuthProvider,
@@ -206,19 +241,19 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String?,
-      status: freezed == status
+      status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as LogInStatusEnum,
-      wallet: freezed == wallet
+      wallet: null == wallet
           ? _value.wallet
           : wallet // ignore: cast_nullable_to_non_nullable
               as Wallet,
-      referral: freezed == referral
+      referral: null == referral
           ? _value.referral
           : referral // ignore: cast_nullable_to_non_nullable
               as UserReferral,
-      setting: freezed == setting
+      setting: null == setting
           ? _value.setting
           : setting // ignore: cast_nullable_to_non_nullable
               as UserSetting,
@@ -294,8 +329,8 @@ class _$UserImpl extends _User {
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
-            const DeepCollectionEquality()
-                .equals(other.authProvider, authProvider) &&
+            (identical(other.authProvider, authProvider) ||
+                other.authProvider == authProvider) &&
             (identical(other.accumulatedPoint, accumulatedPoint) ||
                 other.accumulatedPoint == accumulatedPoint) &&
             (identical(other.nickname, nickname) ||
@@ -303,10 +338,11 @@ class _$UserImpl extends _User {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
-            const DeepCollectionEquality().equals(other.status, status) &&
-            const DeepCollectionEquality().equals(other.wallet, wallet) &&
-            const DeepCollectionEquality().equals(other.referral, referral) &&
-            const DeepCollectionEquality().equals(other.setting, setting) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.wallet, wallet) || other.wallet == wallet) &&
+            (identical(other.referral, referral) ||
+                other.referral == referral) &&
+            (identical(other.setting, setting) || other.setting == setting) &&
             (identical(other.isPhoneVerified, isPhoneVerified) ||
                 other.isPhoneVerified == isPhoneVerified));
   }
@@ -316,15 +352,15 @@ class _$UserImpl extends _User {
       runtimeType,
       userId,
       createdAt,
-      const DeepCollectionEquality().hash(authProvider),
+      authProvider,
       accumulatedPoint,
       nickname,
       email,
       phoneNumber,
-      const DeepCollectionEquality().hash(status),
-      const DeepCollectionEquality().hash(wallet),
-      const DeepCollectionEquality().hash(referral),
-      const DeepCollectionEquality().hash(setting),
+      status,
+      wallet,
+      referral,
+      setting,
       isPhoneVerified);
 
   @JsonKey(ignore: true)

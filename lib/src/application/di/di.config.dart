@@ -16,14 +16,30 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart' as _i141;
 import 'package:firebase_messaging/firebase_messaging.dart' as _i892;
 import 'package:flutter/material.dart' as _i409;
 import 'package:flutter_bloc/flutter_bloc.dart' as _i331;
+import 'package:flutter_dotenv/flutter_dotenv.dart' as _i170;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
+import 'package:go_router/go_router.dart' as _i583;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:logger/logger.dart' as _i974;
-import 'package:poimon_app/application/config/firebase/messaging/firebase_messaging_config.dart'
-    as _i719;
-import 'package:poimon_app/application/config/notification/notification_config.dart'
-    as _i432;
+import 'package:poimon_app/src/application/config/env/env_config.dart' as _i956;
+import 'package:poimon_app/src/application/config/firebase/messaging/firebase_messaging_config.dart'
+    as _i405;
+import 'package:poimon_app/src/application/config/firebase/messaging/firebase_messaging_config_android_impl.dart'
+    as _i764;
+import 'package:poimon_app/src/application/config/firebase/messaging/firebase_messaging_config_ios_impl.dart'
+    as _i260;
+import 'package:poimon_app/src/application/config/firebase/options/firebase_core_config.dart'
+    as _i734;
+import 'package:poimon_app/src/application/config/flutter/flutter_config.dart'
+    as _i231;
+import 'package:poimon_app/src/application/config/flutter/flutter_config_impl.dart'
+    as _i547;
+import 'package:poimon_app/src/application/config/notification/notification_config.dart'
+    as _i169;
+import 'package:poimon_app/src/application/config/notification/notification_config_impl.dart'
+    as _i102;
+import 'package:poimon_app/src/application/routes/app_router.dart' as _i40;
 import 'package:poimon_app/src/domain/repositories/daro_ads_repository.dart'
     as _i326;
 import 'package:poimon_app/src/domain/repositories/device_repository.dart'
@@ -136,8 +152,6 @@ import 'package:poimon_app/src/infrastructure/repositories/permission/permission
     as _i383;
 import 'package:poimon_app/src/infrastructure/repositories/permission/permission_repository_ios_impl.dart'
     as _i725;
-import 'package:poimon_app/src/presentation/blocs/auth/auth_cubit.dart'
-    as _i584;
 import 'package:poimon_app/src/presentation/blocs/loading/loading_cubit.dart'
     as _i132;
 import 'package:poimon_app/src/presentation/blocs/observers/logger_bloc_observer.dart'
@@ -147,6 +161,10 @@ import 'package:poimon_app/src/presentation/blocs/web_view/web_view_cubit.dart'
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
 import 'package:talker/talker.dart' as _i993;
 import 'package:talker_flutter/talker_flutter.dart' as _i207;
+
+const String _dev = 'dev';
+const String _stg = 'stg';
+const String _prod = 'prod';
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -159,12 +177,31 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    final envConfig = _$EnvConfig();
+    final firebaseCoreConfig = _$FirebaseCoreConfig();
     final storageModule = _$StorageModule();
     final sharedPreferenceModule = _$SharedPreferenceModule();
     final loggingModule = _$LoggingModule();
+    final appRouter = _$AppRouter();
     final dioModule = _$DioModule();
     final firebaseModule = _$FirebaseModule();
+    gh.lazySingleton<String>(
+      () => envConfig.devEnvFilePath,
+      instanceName: 'ENV_FILE_PATH',
+      registerFor: {_dev},
+    );
+    gh.lazySingleton<String>(
+      () => envConfig.stgEnvFilePath,
+      instanceName: 'ENV_FILE_PATH',
+      registerFor: {_stg},
+    );
+    gh.lazySingleton<String>(
+      () => envConfig.prodEnvFilePath,
+      instanceName: 'ENV_FILE_PATH',
+      registerFor: {_prod},
+    );
     gh.factory<_i450.WebViewCubit>(() => _i450.WebViewCubit());
+    gh.lazySingleton<_i982.FirebaseOptions>(() => firebaseCoreConfig.options);
     gh.lazySingleton<_i88.LoadingDataSource>(
       () => _i88.LoadingDataSource(),
       dispose: (i) => i.dispose(),
@@ -198,6 +235,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i331.BlocObserver>(
       () => loggingModule.blocObserver(gh<_i207.Talker>()),
       instanceName: 'TalkerBlocObserver',
+    );
+    gh.lazySingleton<_i409.GlobalKey<_i409.NavigatorState>>(
+      () => appRouter.globalNavigatorKey,
+      instanceName: 'ROOT_NAVIGATOR_KEY',
     );
     gh.lazySingleton<_i795.GetIsTrackingAdvertiseIdAvailableUseCase>(() =>
         _i795.GetIsTrackingAdvertiseIdAvailableUseCase(
@@ -240,18 +281,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i353.LoggerBlocObserver(gh<_i974.Logger>()),
       instanceName: 'LoggerBlocObserver',
     );
-    gh.lazySingleton<_i584.AuthCubit>(() => _i584.AuthCubit(
-          streamMeUseCase: gh<InvalidType>(),
-          setLoadingUseCase: gh<InvalidType>(),
-          changeSettingUseCase: gh<InvalidType>(),
-          getAccessTokenUseCase: gh<InvalidType>(),
-          bootAsMemberUseCase: gh<InvalidType>(),
-          fetchUserPhoneNumberUseCase: gh<InvalidType>(),
-          signUpUseCase: gh<InvalidType>(),
-          hackleSetUserPhoneNumberUseCase: gh<InvalidType>(),
-          initOfferWallUseCase: gh<InvalidType>(),
-          userApi: gh<InvalidType>(),
-        ));
     gh.lazySingleton<_i310.SetLoadingUseCase>(() => _i310.SetLoadingUseCase(
         loadingRepository: gh<_i258.LoadingRepository>()));
     gh.lazySingleton<_i98.GetLoadingUseCase>(() => _i98.GetLoadingUseCase(
@@ -283,20 +312,16 @@ extension GetItInjectableX on _i174.GetIt {
           packageDataSource: gh<_i641.PackageDataSource>()),
       instanceName: 'AppInfoInterceptor',
     );
-    await gh.lazySingletonAsync<_i71.LocalNotificationDataSource>(
-      () {
-        final i = _i71.LocalNotificationDataSource.fromConfig(
-            gh<_i432.NotificationConfig>());
-        return i.init().then((_) => i);
-      },
-      preResolve: true,
-    );
     gh.lazySingleton<_i942.SharedPreferenceDataSource>(() =>
         _i942.SharedPreferenceDataSource(
             sharedPreferences: gh<_i460.SharedPreferences>()));
     gh.lazySingleton<_i361.Interceptor>(
       () => _i213.TalkerLoggingInterceptoer(talker: gh<_i993.Talker>()),
       instanceName: 'TalkerLoggingInterceptoer',
+    );
+    await gh.lazySingletonAsync<_i170.DotEnv>(
+      () => envConfig.env(gh<String>(instanceName: 'ENV_FILE_PATH')),
+      preResolve: true,
     );
     gh.lazySingleton<_i573.AirbridgeApi>(
         () => _i573.AirbridgeApi(gh<_i361.Dio>(instanceName: 'airbridgeDio')));
@@ -325,6 +350,11 @@ extension GetItInjectableX on _i174.GetIt {
       instanceName: 'SESSION_ID',
       preResolve: true,
     );
+    gh.lazySingleton<_i583.GoRouter>(() => appRouter.goRouter(
+          observers: gh<List<_i409.NavigatorObserver>>(),
+          navigatorKey: gh<_i409.GlobalKey<_i409.NavigatorState>>(
+              instanceName: 'ROOT_NAVIGATOR_KEY'),
+        ));
     gh.lazySingleton<_i361.Interceptor>(
       () => _i709.AuthInterceptor(
           secureStorageDataSource: gh<_i641.SecureStorageDataSource>()),
@@ -340,24 +370,26 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i361.Dio>(),
           baseUrl: gh<String>(instanceName: 'API_URL'),
         ));
+    gh.lazySingleton<_i169.NotificationConfig>(
+        () => _i102.NotificationConfigImpl(goRouter: gh<_i583.GoRouter>()));
     gh.lazySingleton<_i409.NavigatorObserver>(
       () => firebaseModule.observer(gh<_i398.FirebaseAnalytics>()),
       instanceName: 'FirebaseAnalyticsObserver',
-    );
-    await gh.lazySingletonAsync<_i193.FirebaseMessagingDataSource>(
-      () {
-        final i = _i193.FirebaseMessagingDataSource(
-          firebaseMessaging: gh<_i892.FirebaseMessaging>(),
-          config: gh<_i719.FirebaseMessagingConfig>(),
-        );
-        return i.init().then((_) => i);
-      },
-      preResolve: true,
     );
     gh.lazySingleton<_i361.Interceptor>(
       () => _i1021.SessionIdInterceptor(
           sessionId: gh<String>(instanceName: 'SESSION_ID')),
       instanceName: 'SessionIdInterceptor',
+    );
+    await gh.lazySingletonAsync<_i193.FirebaseMessagingDataSource>(
+      () {
+        final i = _i193.FirebaseMessagingDataSource(
+          firebaseMessaging: gh<_i892.FirebaseMessaging>(),
+          config: gh<_i405.FirebaseMessagingConfig>(),
+        );
+        return i.init().then((_) => i);
+      },
+      preResolve: true,
     );
     gh.lazySingleton<_i579.FirebaseCrashlyticsDataSource>(() =>
         _i579.FirebaseCrashlyticsDataSource(
@@ -391,20 +423,61 @@ extension GetItInjectableX on _i174.GetIt {
       ),
       instanceName: 'DeviceRepositoryIosImpl',
     );
+    await gh.lazySingletonAsync<_i71.LocalNotificationDataSource>(
+      () {
+        final i = _i71.LocalNotificationDataSource.fromConfig(
+            gh<_i169.NotificationConfig>());
+        return i.init().then((_) => i);
+      },
+      preResolve: true,
+    );
+    gh.lazySingleton<_i405.FirebaseMessagingConfig>(
+      () => _i764.FirebaseMessagingConfigAndroidImpl(
+        localNotificationDataSource: gh<_i641.LocalNotificationDataSource>(),
+        cachedQueryDataSource: gh<_i641.CachedQueryDataSource>(),
+        goRouter: gh<_i583.GoRouter>(),
+      ),
+      instanceName: 'FirebaseMessagingConfigAndroidImpl',
+    );
+    await gh.lazySingletonAsync<_i231.FlutterConfig>(
+      () {
+        final i = _i547.FlutterConfigImpl(
+          firebaseCrashlyticsDataSource:
+              gh<_i814.FirebaseCrashlyticsDataSource>(),
+          talker: gh<_i993.Talker>(),
+        );
+        return i.init().then((_) => i);
+      },
+      preResolve: true,
+    );
     gh.lazySingleton<_i361.Interceptor>(
       () => _i918.FirebaseInterceptor(
           firebaseMessagingDataSource: gh<_i814.FirebaseMessagingDataSource>()),
       instanceName: 'FirebaseInterceptor',
     );
+    gh.lazySingleton<_i405.FirebaseMessagingConfig>(
+      () => _i260.FirebaseMessagingConfigIosImpl(
+        localNotificationDataSource: gh<_i641.LocalNotificationDataSource>(),
+        cachedQueryDataSource: gh<_i641.CachedQueryDataSource>(),
+        goRouter: gh<_i583.GoRouter>(),
+      ),
+      instanceName: 'FirebaseMessagingConfigIosImpl',
+    );
     return this;
   }
 }
+
+class _$EnvConfig extends _i956.EnvConfig {}
+
+class _$FirebaseCoreConfig extends _i734.FirebaseCoreConfig {}
 
 class _$StorageModule extends _i156.StorageModule {}
 
 class _$SharedPreferenceModule extends _i452.SharedPreferenceModule {}
 
 class _$LoggingModule extends _i2.LoggingModule {}
+
+class _$AppRouter extends _i40.AppRouter {}
 
 class _$DioModule extends _i612.DioModule {}
 
