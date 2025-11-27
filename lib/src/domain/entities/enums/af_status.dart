@@ -1,0 +1,4 @@
+enum AfStatus {
+  organic,
+  nonOrganic,
+}

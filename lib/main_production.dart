@@ -1,6 +1,13 @@
-import 'package:poimon_app/app/app.dart';
-import 'package:poimon_app/bootstrap.dart';
+import 'dart:async';
 
-Future<void> main() async {
-  await bootstrap(() => const App());
+import 'package:flutter/widgets.dart';
+import 'package:injectable/injectable.dart';
+import 'package:poimon_app/bootstrap.dart';
+import 'package:poimon_app/src/application/apps/apps.dart';
+
+void main() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await bootstrap(() => const ProductionApp(), Environment.prod);
+  }, (error, stackTrace) {});
 }

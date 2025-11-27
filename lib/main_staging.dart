@@ -1,6 +1,7 @@
-import 'package:poimon_app/app/app.dart';
 import 'package:poimon_app/bootstrap.dart';
+import 'package:poimon_app/src/application/apps/apps.dart';
+import 'package:poimon_app/src/utils/utils.dart';
 
-Future<void> main() async {
-  await bootstrap(() => const App());
+void main() {
+  bootstrap(() => const StagingApp(), EnvironmentX.stg);
 }

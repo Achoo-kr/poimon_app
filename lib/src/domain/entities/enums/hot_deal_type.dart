@@ -1,0 +1,1 @@
+enum HotDealType { coupang, gmarket }

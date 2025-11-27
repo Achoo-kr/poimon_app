@@ -1,0 +1,4 @@
+enum LedgerTabType {
+  completed,
+  pending,
+}

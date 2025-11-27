@@ -1,0 +1,4 @@
+enum PermissionStatus {
+  allowed,
+  denied,
+}

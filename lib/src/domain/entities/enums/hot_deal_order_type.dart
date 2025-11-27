@@ -1,0 +1,4 @@
+enum HotDealOrderType {
+  popular,
+  discount,
+}

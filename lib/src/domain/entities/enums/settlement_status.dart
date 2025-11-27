@@ -1,0 +1,1 @@
+enum SettlementStatus { settled, pendingCalculation }
