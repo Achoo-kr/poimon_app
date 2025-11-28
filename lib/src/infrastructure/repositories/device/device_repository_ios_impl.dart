@@ -12,7 +12,6 @@ class DeviceRepositoryIosImpl implements DeviceRepository {
   DeviceRepositoryIosImpl({
     required DeviceDataSource deviceDataSource,
     required FirebaseMessagingDataSource firebaseDataSource,
-    required UserApi userApi,
     required IosSettingDataSource iosSettingDataSource,
     required AppTrackingTransparencyDataSource
     appTrackingTransparencyDataSource,
@@ -26,12 +25,12 @@ class DeviceRepositoryIosImpl implements DeviceRepository {
        _deviceDataSource = deviceDataSource {
     _sendDeviceIdMutation = Mutation(
       queryFn: (request) async {
-        final response = await userApi.sendDeviceId(
-          devicePlatform: request.platform.toJson(),
-          fcmToken: request.fcmToken,
-          deviceId: request.deviceId,
-        );
-        validateApiResponse(response);
+        // final response = await userApi.sendDeviceId(
+        //   devicePlatform: request.platform.toJson(),
+        //   fcmToken: request.fcmToken,
+        //   deviceId: request.deviceId,
+        // );
+        // validateApiResponse(response);
       },
     );
   }

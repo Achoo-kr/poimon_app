@@ -22,6 +22,9 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:go_router/go_router.dart' as _i583;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:logger/logger.dart' as _i974;
+import 'package:poimon_app/src/application/config/app/app_config.dart' as _i986;
+import 'package:poimon_app/src/application/config/bloc/bloc_config.dart'
+    as _i542;
 import 'package:poimon_app/src/application/config/env/env_config.dart' as _i956;
 import 'package:poimon_app/src/application/config/firebase/messaging/firebase_messaging_config.dart'
     as _i405;
@@ -108,10 +111,6 @@ import 'package:poimon_app/src/infrastructure/data_sources/local/storage/storage
     as _i156;
 import 'package:poimon_app/src/infrastructure/data_sources/remote/api/airbridge_api.dart'
     as _i573;
-import 'package:poimon_app/src/infrastructure/data_sources/remote/api/naver_static_map_api.dart'
-    as _i1045;
-import 'package:poimon_app/src/infrastructure/data_sources/remote/api/user_api.dart'
-    as _i716;
 import 'package:poimon_app/src/infrastructure/data_sources/remote/dio/dio_module.dart'
     as _i612;
 import 'package:poimon_app/src/infrastructure/data_sources/remote/dio/interceptors/advertising_android_interceptor.dart'
@@ -185,6 +184,7 @@ extension GetItInjectableX on _i174.GetIt {
     final appRouter = _$AppRouter();
     final dioModule = _$DioModule();
     final firebaseModule = _$FirebaseModule();
+    final appConfig = _$AppConfig();
     gh.lazySingleton<String>(
       () => envConfig.devEnvFilePath,
       instanceName: 'ENV_FILE_PATH',
@@ -325,8 +325,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i573.AirbridgeApi>(
         () => _i573.AirbridgeApi(gh<_i361.Dio>(instanceName: 'airbridgeDio')));
-    gh.lazySingleton<_i1045.NaverStaticMapApi>(
-        () => _i1045.NaverStaticMapApi(gh<_i361.Dio>(instanceName: 'ncpDio')));
     gh.lazySingleton<_i115.QueryObserver>(
       () => _i526.CachedQueryObserver(talker: gh<_i207.Talker>()),
       instanceName: 'CachedQueryObserver',
@@ -355,10 +353,25 @@ extension GetItInjectableX on _i174.GetIt {
           navigatorKey: gh<_i409.GlobalKey<_i409.NavigatorState>>(
               instanceName: 'ROOT_NAVIGATOR_KEY'),
         ));
+    await gh.lazySingletonAsync<_i542.BlocConfig>(
+      () {
+        final i = _i542.BlocConfig(blocObserver: gh<_i331.BlocObserver>());
+        return i.init().then((_) => i);
+      },
+      preResolve: true,
+    );
     gh.lazySingleton<_i361.Interceptor>(
       () => _i709.AuthInterceptor(
           secureStorageDataSource: gh<_i641.SecureStorageDataSource>()),
       instanceName: 'AuthInterceptor',
+    );
+    gh.lazySingleton<String>(
+      () => appConfig.productWebUrl(gh<_i170.DotEnv>()),
+      instanceName: 'PRODUCT_WEB_URL',
+    );
+    gh.lazySingleton<String>(
+      () => appConfig.apiUrl(gh<_i170.DotEnv>()),
+      instanceName: 'API_URL',
     );
     gh.lazySingleton<_i398.FirebaseAnalytics>(
         () => firebaseModule.analytics(gh<_i982.FirebaseApp>()));
@@ -366,10 +379,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => firebaseModule.messaging(gh<_i982.FirebaseApp>()));
     gh.lazySingleton<_i141.FirebaseCrashlytics>(
         () => firebaseModule.crashlytics(gh<_i982.FirebaseApp>()));
-    gh.lazySingleton<_i716.UserApi>(() => _i716.UserApi(
-          gh<_i361.Dio>(),
-          baseUrl: gh<String>(instanceName: 'API_URL'),
-        ));
     gh.lazySingleton<_i169.NotificationConfig>(
         () => _i102.NotificationConfigImpl(goRouter: gh<_i583.GoRouter>()));
     gh.lazySingleton<_i409.NavigatorObserver>(
@@ -394,19 +403,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i579.FirebaseCrashlyticsDataSource>(() =>
         _i579.FirebaseCrashlyticsDataSource(
             firebaseCrashlytics: gh<_i141.FirebaseCrashlytics>()));
-    gh.lazySingleton<_i372.DeviceRepository>(
-      () => _i379.DeviceRepositoryAndroidImpl(
-        deviceDataSource: gh<_i814.DeviceDataSource>(),
-        firebaseDataSource: gh<_i814.FirebaseMessagingDataSource>(),
-        androidIntentDataSource: gh<_i814.AndroidIntentDataSource>(),
-        packageDataSource: gh<_i814.PackageDataSource>(),
-        userApi: gh<_i814.UserApi>(),
-        advertiseIdDataSource: gh<_i814.AdvertiseIdDataSource>(),
-        cachedQueryDataSource: gh<_i814.CachedQueryDataSource>(),
-        sharedPreferenceDataSource: gh<_i814.SharedPreferenceDataSource>(),
-      ),
-      instanceName: 'DeviceRepositoryAndroidImpl',
-    );
     gh.lazySingleton<_i457.FirebaseAnalyticsDataSource>(() =>
         _i457.FirebaseAnalyticsDataSource(
             firebaseAnalytics: gh<_i398.FirebaseAnalytics>()));
@@ -414,7 +410,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i604.DeviceRepositoryIosImpl(
         deviceDataSource: gh<_i814.DeviceDataSource>(),
         firebaseDataSource: gh<_i814.FirebaseMessagingDataSource>(),
-        userApi: gh<_i814.UserApi>(),
         iosSettingDataSource: gh<_i814.IosSettingDataSource>(),
         appTrackingTransparencyDataSource:
             gh<_i814.AppTrackingTransparencyDataSource>(),
@@ -450,6 +445,18 @@ extension GetItInjectableX on _i174.GetIt {
       },
       preResolve: true,
     );
+    gh.lazySingleton<_i372.DeviceRepository>(
+      () => _i379.DeviceRepositoryAndroidImpl(
+        deviceDataSource: gh<_i814.DeviceDataSource>(),
+        firebaseDataSource: gh<_i814.FirebaseMessagingDataSource>(),
+        androidIntentDataSource: gh<_i814.AndroidIntentDataSource>(),
+        packageDataSource: gh<_i814.PackageDataSource>(),
+        advertiseIdDataSource: gh<_i814.AdvertiseIdDataSource>(),
+        cachedQueryDataSource: gh<_i814.CachedQueryDataSource>(),
+        sharedPreferenceDataSource: gh<_i814.SharedPreferenceDataSource>(),
+      ),
+      instanceName: 'DeviceRepositoryAndroidImpl',
+    );
     gh.lazySingleton<_i361.Interceptor>(
       () => _i918.FirebaseInterceptor(
           firebaseMessagingDataSource: gh<_i814.FirebaseMessagingDataSource>()),
@@ -482,3 +489,5 @@ class _$AppRouter extends _i40.AppRouter {}
 class _$DioModule extends _i612.DioModule {}
 
 class _$FirebaseModule extends _i487.FirebaseModule {}
+
+class _$AppConfig extends _i986.AppConfig {}

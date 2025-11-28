@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:poimon_app/src/application/apps/app_lifecycle_manager.dart';
 import 'package:poimon_app/src/application/di/di.dart';
-import 'package:poimon_app/src/presentation/l10n/l10n.dart';
+import 'package:poimon_app/l10n/l10n.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});

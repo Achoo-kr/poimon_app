@@ -14,7 +14,6 @@ class DeviceRepositoryAndroidImpl implements DeviceRepository {
     required FirebaseMessagingDataSource firebaseDataSource,
     required AndroidIntentDataSource androidIntentDataSource,
     required PackageDataSource packageDataSource,
-    required UserApi userApi,
     required AdvertiseIdDataSource advertiseIdDataSource,
     required CachedQueryDataSource cachedQueryDataSource,
     required SharedPreferenceDataSource sharedPreferenceDataSource,
@@ -27,12 +26,12 @@ class DeviceRepositoryAndroidImpl implements DeviceRepository {
        _deviceDataSource = deviceDataSource {
     _sendDeviceIdMutation = Mutation(
       queryFn: (request) async {
-        final response = await userApi.sendDeviceId(
-          devicePlatform: request.platform.toJson(),
-          fcmToken: request.fcmToken,
-          deviceId: request.deviceId,
-        );
-        validateApiResponse(response);
+        // final response = await userApi.sendDeviceId(
+        //   devicePlatform: request.platform.toJson(),
+        //   fcmToken: request.fcmToken,
+        //   deviceId: request.deviceId,
+        // );
+        // validateApiResponse(response);
       },
     );
   }
